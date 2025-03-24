@@ -18,11 +18,11 @@ body {
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 350px;
+  width: 400px;
   text-align: center;
 }
 
-.todo-contatiner__header {
+.todo-container__header {
   font-size: 24px;
   margin-bottom: 16px;
 }
@@ -71,6 +71,7 @@ body {
 
 .render-container__section {
   width: 100%;
+  margin: 10px 5px 10px 5px;
   text-align: left;
 }
 
