@@ -1,0 +1,28 @@
+.block {
+  display: block;
+  width: 300px;
+  height: 150px;
+  background-color: aqua;
+  margin: 10px;
+  text-align: center;
+  line-height: 50px;
+}
+
+.inline {
+  display: inline;
+  width: 300px; /* 적용되지 않음 */
+  height: 150px; /* 적용되지 않음 */
+  background-color: lightcoral;
+  margin: 10px; /* 좌우 여백은 적용되지만, 상하는 안됨 */
+  text-align: center;
+}
+
+.inline-block {
+  display: inline-block;
+  width: 300px;
+  height: 150px;
+  background-color: lightgreen;
+  margin: 10px;
+  text-align: center;
+  line-height: 50px;
+}
