@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <script type="module" src="./dist/script.js" defer></script>
+    <title>UMC todo</title>
+</head>
+
+<body>
+    <div class="todo-container">
+        <h1 class="todo-container__title">YONG TODO</h1>
+
+        <form id="todo-form" class="todo-container__form">
+            <input type="text" id="todo-input" class="todo-container__input" placeholder="할 일 입력" required />
+            <button id="todo-add" class="todo-container__add-button">할 일 추가</button>
+        </form>
+
+        <div class="todo-main">
+
+            <div class="todo-main__task" id="todo-task">
+                <h3>할 일</h3>
+
+                <ul id="todo-list" class="todo-main__list">
+                    <li class="todo-main__item">
+                        <p class="todo-main__item-text">매튜</p>
+                        <button class="todo-main__item-button">완료</button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="todo-main__task" id="todo-completed">
+                <h3>완료</h3>
+                <ul id="done-list" class="todo-main__list">
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
