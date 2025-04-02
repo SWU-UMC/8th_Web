@@ -71,6 +71,6 @@ export type MovieDetailResponse = {
   tagline: string;
   title: string;
   video: boolean;
-  vote_averge: number;
+  vote_average: number;
   vote_count: number;
 };
