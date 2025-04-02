@@ -4,6 +4,7 @@ import { Movie, MovieResponse } from '../types/movie';
 import MovieCard from "../components/MovieCard";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import { useParams } from "react-router-dom";
+import { ChevronLeft, ChevronRight } from "lucide-react"; //아이콘 추가
 
 export default function MoviePage() {
     const [movies, setMovies] = useState<Movie[]>([]);
@@ -52,20 +53,7 @@ export default function MoviePage() {
     }
 
     return (
-        <>
-            <div className="flex items-center justify-center gap-6 mt-5">
-                <button
-                    className="bg-[#dda5e3] text-white px-6 py-3 rounded-lg shadow-md hover:bg-[#b2dab1] transition-all duration-200 disabled:bg-gray-300 cursor-pointer disabled:cursor-not-allowed"
-                    disabled={page === 1}
-                    onClick={() => setPage((prev) => prev - 1)}
-                >{`<`}</button>
-                <span>{page} 페이지</span>
-                <button
-                    className="bg-[#dda5e3] text-white px-6 py-3 rounded-lg shadow-md hover:bg-[#b2dab1] transition-all duration-200 cursor-pointer"
-                    onClick={() => setPage((prev) => prev + 1)}
-                    >{`>`}</button>
-        </div>
-
+        <> 
         {isPending && (
             <div className="flex items-center justify-center h-dvh">
                 <LoadingSpinner/>
@@ -79,6 +67,29 @@ export default function MoviePage() {
             ))} 
         </div> 
         )}
+        
+        <div className="flex items-center justify-center p-6 gap-6 mt-5">
+            {/*이전 페이지 버튼*/}
+                <button
+                    className="bg-red-600 w-12 h-12 rounded-full shadow-lg hover:bg-red-700 transition-all duration-300 disabled:bg-gray-300 cursor-pointer disabled:cursor-not-allowed flex items-center justify-center"
+                    disabled={page === 1}
+                    onClick={() => setPage((prev) => prev - 1)}
+            >
+        <ChevronLeft size={24} color="white" />
+                </button>
+
+        {/*페이지 넘버*/}
+        <span className="text-2xl font-extrabold text-black tracking-wide">Page {page}</span>
+
+        {/*다음 페이지 버튼*/}
+        <button
+            className="bg-red-600 w-12 h-12 rounded-full shadow-lg hover:bg-red-700 transition-all duration-300 cursor-pointer flex items-center justify-center"
+            onClick={() => setPage((prev) => prev + 1)}
+        >
+        <ChevronRight size={24} color="white" />
+        </button>
+        </div>
+        
         </>
     );
 }
