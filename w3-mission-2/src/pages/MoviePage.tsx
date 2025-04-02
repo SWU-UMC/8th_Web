@@ -3,6 +3,7 @@ import axios from "axios";
 import { Movie, MovieResponse } from "../types/movie";
 import MovieCard from "../components/MovieCard";
 import { LoadingSpinner } from "../components/LoadingSpinner";
+import { useParams } from "react-router-dom";
 
 export default function MoviePage(): Element {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -14,13 +15,17 @@ export default function MoviePage(): Element {
   //3. 페이지
   const [page, setPage] = useState(1);
 
+  const { category } = useParams<{
+    category: string;
+  }>();
+
   //데이터 호출할 때 -> useEffect 사용
   useEffect((): void => {
     const fetchMovies = async (): Promise<void> => {
       setIsPending(true);
       try {
         const { data } = await axios.get<MovieResponse>(
-          `https://api.themoviedb.org/3/movie/popular?language=en-US&page=${page}`,
+          `https://api.themoviedb.org/3/movie/${category}?language=en-US&page=${page}`,
 
           {
             headers: {
@@ -37,7 +42,7 @@ export default function MoviePage(): Element {
     };
 
     fetchMovies();
-  }, [page]);
+  }, [page, category]);
 
   if (isError) {
     return (
