@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>css미션2_만경코딩</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            grid-template-rows: 80px 300px 330px 90px;
+        }
+        
+        .header {
+            grid-column: 1 / 2;
+            grid-row: 1 / 2;
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .menu {
+            grid-column: 2 / 4;
+            grid-row: 1 / 2;
+            background-color: orangered;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .hero {
+            grid-column: 1 / 4;
+            grid-row: 2 / 3;
+            background-color: blue;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .main {
+            grid-column: 1 / 2;
+            grid-row: 3 / 4;
+            background-color: navy;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+        }
+        
+        .white-space {
+            grid-column: 2 / 3;
+            grid-row: 3 / 4;
+            background-color: white;
+        }
+        
+        .right-column {
+            grid-column: 3 / 4;
+            grid-row: 3 / 4;
+            display: grid;
+            grid-template-rows: 1fr 1fr;
+        }
+        
+        .image {
+            grid-row: 1 / 2;
+            background-color: skyblue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .extra {
+            grid-row: 2 / 3;
+            background-color: green;
+            color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .banner {
+            grid-column: 1 / 4;
+            grid-row: 4 / 5;
+            background-color: yellow;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">HEADER</div>
+        <div class="menu">MENU</div>
+        <div class="hero">HERO</div>
+        <div class="main">MAIN</div>
+        <div class="white-space"></div>
+        <div class="right-column">
+            <div class="image">IMAGE</div>
+            <div class="extra">EXTRA</div>
+        </div>
+        <div class="banner">BANNER</div>
+    </div>
+</body>
+</html>
