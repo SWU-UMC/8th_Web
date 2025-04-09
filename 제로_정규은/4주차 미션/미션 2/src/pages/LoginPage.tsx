@@ -37,12 +37,12 @@ const LoginPage = () => {
     <div className="flex flex-col items-center justify-center h-full gap-4 ">
       <div className="flex flex-col gap-3">
         <div className="relative flex items-center mb-6">
-          <img 
-            className="absolute w-5 h-5"
-            src="src/assets/arrow.svg"
-            onClick={() => {navigate(-1)}}
-            style={{ cursor: "pointer" }}
-          />
+        <button 
+    onClick={() => navigate(-1)} 
+    className="absolute left-0 text-2xl text-gray-600 hover:text-gray-800 px-2 cursor-pointer"
+  >
+    {"<"}
+  </button>
           <div className="mx-auto text-xl font-bold">
             로그인
           </div>
