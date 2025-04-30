@@ -11,6 +11,7 @@ let refreshPromise: Promise<string> | null = null;
 
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_SERVER_API_URL,
+  //withCredential
 });
 
 //요청 인터셉터: 모든 요청 전에 accessToken을 Authorization 헤더에 추가
