@@ -13,17 +13,17 @@ import CastCard from "../components/CastCard";
 export default function MovieDetailPage(): Element {
   const { movieId } = useParams();
   const [movie, setMovie] = useState<MovieDetailResponse | null>(null);
-  const [cast, setCast] = useState<Cast[]>([]);
-  const [director, setDirector] = useState<Crew | null>(null);
+  //const [cast, setCast] = useState<Cast[]>([]);
+  //const [director, setDirector] = useState<Crew | null>(null);
   const [isPending, setIsPending] = useState(false);
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     const fetchMovieDetail = async () => {
       setIsPending(true);
-      setIsError(false);
+
       try {
-        const [movieRes, creditRes] = await Promise.all([
+        const [data] = await axios.get([
           axios.get<MovieDetail>(
             `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`,
             {
