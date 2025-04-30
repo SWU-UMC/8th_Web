@@ -1,15 +1,19 @@
 import useForm from "../hooks/useForm"
 import { useNavigate } from "react-router-dom";
 import { UserSigninInformation, validateSignin } from "../utils/validate"
-import { postSignin } from "../apis/auth";
-import { useLocalStorage } from "../hooks/useLocalStorage";
-import { LOCAL_STORAGE_KEY } from "../constants/key";
 import { useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 
 const LoginPage = () => {
+  const { login, accessToken } =useAuth();
   const navigate = useNavigate();
-  const { setItem } = useLocalStorage(LOCAL_STORAGE_KEY.accessToken);
+
+  useEffect(() => {
+    if (accessToken){
+      navigate('/');
+    }
+  }, [navigate, accessToken]);
+
   const { values, errors, touched, getInputProps } = useForm<UserSigninInformation>({
     initialValue: {
       email: "",
@@ -19,16 +23,12 @@ const LoginPage = () => {
   });
 
   const handleSubmit = async () => {
-    let response;
-    try {
-      response = await postSignin(values);
-      console.log('로그인 요청:', response);
-      setItem(response.data.accessToken);
-      navigate("/my");
-    } catch(e) {
-      window.alert(response?.data);
-    }
+    await login(values);
   };
+
+  const handleGoogleLogin = () => {
+    window.location.href = import.meta.env.VITE_SERVER_API_URL + "/v1/auth/google/login"
+  }
 
   // 오류가 하나라도 있거나, 입력값이 비어있으면 버튼을 비활성화
   const isDisabled = 
@@ -51,6 +51,7 @@ const LoginPage = () => {
         </div>
         <button 
           type="button" 
+          onClick={handleGoogleLogin}
           className="relative flex items-center w-full py-3 border border-[#2c4629] p-[10px] rounded-sm text-lg cursor-pointer hover:bg-gray-100 transition-colors duration-200"
         >
           <img src="src/assets/google.svg" alt="구글 아이콘" className="w-6 h-6 inline-block mr-2 absolute " />

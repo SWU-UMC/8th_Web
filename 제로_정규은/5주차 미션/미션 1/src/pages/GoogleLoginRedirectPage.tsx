@@ -23,7 +23,7 @@ const GoogleLoginRedirectPage = () => {
     }, [setAccessToken, setRefreshToken]);
 
   return (
-    <div>구글 로그인 리다이렉 화면</div>
+    <div>구글 로그인 리다이렉트 화면</div>
   )
 };
 
