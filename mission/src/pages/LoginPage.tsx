@@ -23,7 +23,6 @@ const LoginPage = () => {
       validate: validateSignin,
     });
   const handleSubmit = async () => {
-    console.log("보내는 로그인 값:", values);
     await login(values);
   };
 
@@ -69,15 +68,14 @@ const LoginPage = () => {
           <div className="border-t border-gray-500 flex-grow" />
         </div>
 
-        {/* 이메일 입력 */}
         <input
           {...getInputProps("email")}
           name="email"
-          className={`bg-black border w-[300px] p-[10px] rounded-md text-white
+          className={`bg-black border w-[300px] p-[10px] rounded-md text-white 
             ${
               errors?.email && touched?.email
-                ? "border-red-500 bg-red-200"
-                : "border-gray-300"
+                ? "border-red-500"
+                : "border-gray-500"
             }`}
           type={"email"}
           placeholder={"이메일"}
@@ -87,11 +85,11 @@ const LoginPage = () => {
         )}
         <input
           {...getInputProps("password")}
-          className={`bg-black border w-[300px] p-[10px] rounded-md text-white
+          className={`bg-black border w-[300px] p-[10px] rounded-md text-white 
             ${
               errors?.password && touched?.password
-                ? "border-red-500 bg-red-200"
-                : "border-gray-300"
+                ? "border-red-500"
+                : "border-gray-500"
             }`}
           type={"password"}
           placeholder={"비밀번호"}

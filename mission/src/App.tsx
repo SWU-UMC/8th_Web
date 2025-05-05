@@ -1,7 +1,7 @@
 import {
   createBrowserRouter,
-  RouterProvider,
   RouteObject,
+  RouterProvider,
 } from "react-router-dom";
 import "./App.css";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
@@ -47,7 +47,7 @@ const router = createBrowserRouter([...publicRoutes, ...protectedRoutes]);
 function App() {
   return (
     <AuthProvider>
-      <RouterProvider router={router} />
+      <RouterProvider router={router} />;
     </AuthProvider>
   );
 }

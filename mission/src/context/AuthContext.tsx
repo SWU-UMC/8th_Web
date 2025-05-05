@@ -1,5 +1,5 @@
-import { createContext, PropsWithChildren, useContext, useState } from "react";
 import { RequestSigninDto } from "../types/auth.ts";
+import { createContext, PropsWithChildren, useContext, useState } from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage.ts";
 import { LOCAL_STORAGE_KEY } from "../constants/key.ts";
 import { postLogout, postSignin } from "../apis/auth.ts";
@@ -7,7 +7,7 @@ import { postLogout, postSignin } from "../apis/auth.ts";
 interface AuthContextType {
   accessToken: string | null;
   refreshToken: string | null;
-  login: (signInData: RequestSigninDto) => Promise<void>;
+  login: (signINData: RequestSigninDto) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -24,6 +24,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     setItem: setAccessTokenInStorage,
     removeItem: removeAccessTokenFromStorage,
   } = useLocalStorage(LOCAL_STORAGE_KEY.accessToken);
+
   const {
     getItem: getRefreshTokenFromStorage,
     setItem: setRefreshTokenInStorage,
@@ -31,16 +32,16 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   } = useLocalStorage(LOCAL_STORAGE_KEY.refreshToken);
 
   const [accessToken, setAccessToken] = useState<string | null>(
-    getAccessTokenFromStorage()
+    getAccessTokenFromStorage() || null
   );
 
   const [refreshToken, setRefreshToken] = useState<string | null>(
-    getRefreshTokenFromStorage()
+    getRefreshTokenFromStorage() || null
   );
 
-  const login = async (signInData: RequestSigninDto) => {
+  const login = async (signinData: RequestSigninDto) => {
     try {
-      const { data } = await postSignin(signInData);
+      const { data } = await postSignin(signinData);
 
       if (data) {
         const newAccessToken = data.accessToken;
@@ -51,6 +52,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
         setAccessToken(newAccessToken);
         setRefreshToken(newRefreshToken);
+
         alert("로그인 성공");
         window.location.href = "/my";
       }
@@ -68,6 +70,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
       setAccessToken(null);
       setRefreshToken(null);
+
       alert("로그아웃 성공");
     } catch (error) {
       console.error("로그아웃 오류", error);

@@ -98,7 +98,7 @@ axiosInstance.interceptors.response.use(
       //진행중인 refreshPromise가 해결될 때까지 기다림
       return refreshPromise.then((newAccessToken) => {
         //원본 요청의 Authorization 헤더를 갱신된 토큰으로 업뎃
-        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+        originalRequest.headers["Authorization"] = `Bearer${newAccessToken}`;
         //업데이트 된 원본 요청을 재시도 합니다.
         return axiosInstance.request(originalRequest);
       });
