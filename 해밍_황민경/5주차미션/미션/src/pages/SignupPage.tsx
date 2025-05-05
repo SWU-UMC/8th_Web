@@ -40,6 +40,7 @@ const SignupPage = () => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<FormFields>({
     defaultValues: {
@@ -66,11 +67,12 @@ const SignupPage = () => {
     const response = await postSignup(rest);
 
     console.log(response);
+
     navigate("/login");
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-full gap-4 bg-black text-white">
+    <div className="flex flex-col items-center justify-center h-full bg-black text-white">
       {/* 상단 고정 부분 */}
       <div className="w-[300px] flex items-center justify-between px-2 py-2 relative">
         <button
@@ -87,21 +89,45 @@ const SignupPage = () => {
       <div className="flex flex-col gap-3">
         {step === 1 && (
           <>
+            <button
+              type="button"
+              onClick={() => {
+                window.location.href =
+                  import.meta.env.VITE_SERVER_API_URL + "/v1/auth/google/login";
+              }}
+              className="w-full border border-gray-600 rounded py-2 px-4 flex justify-center items-center gap-2"
+            >
+              <img
+                src="/google-logo.png"
+                alt="Google logo"
+                className="w-5 h-5"
+              />
+              <span>구글 로그인</span>
+            </button>
+
+            <div className="flex items-center justify-center gap-4">
+              <div className="border-t border-gray-600 flex-grow"></div>
+              <span className="text-gray-400 text-sm">OR</span>
+              <div className="border-t border-gray-600 flex-grow"></div>
+            </div>
             <input
               {...register("email")}
               className={`bg-black border w-[300px] p-[10px] rounded-md text-white 
-              ${errors?.email ? "border-pink-500" : "border-gray-500"}`}
+              ${errors?.email ? "border-red-500" : "border-white"}`}
               type={"email"}
               placeholder={"이메일"}
             />
             {errors.email && (
-              <div className="text-pink-400 text-sm">
-                {errors.email.message}
-              </div>
+              <div className="text-red-500 text-sm">{errors.email.message}</div>
             )}
             <button
               type="button"
-              className="w-full bg-pink-500 text-white py-3 rounded-md hover:bg-pink-600 transition-colors disabled:bg-gray-500 cursor-pointer"
+              className={`w-full py-3 rounded-md text-sm font-semibold
+                ${
+                  !email || errors.email
+                    ? "bg-[#1b1b1b] text-gray-500 cursor-not-allowed"
+                    : "bg-[#ff2aa3] text-white hover:bg-pink-500 transition-colors"
+                }`}
               disabled={!email || !!errors.email}
               onClick={() => setStep(2)}
             >
@@ -121,20 +147,20 @@ const SignupPage = () => {
               <input
                 {...register("password")}
                 className={`bg-black border w-[300px] p-[10px] rounded-sm text-white
-                ${errors?.password ? "border-pink-500" : "border-gray-500"}`}
+                ${errors?.password ? "border-red-500" : "border-white"}`}
                 type={showPw ? "text" : "password"}
                 placeholder={"비밀번호"}
               />
               <button
                 type="button"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white"
                 onClick={() => setShowPw(!showPw)}
               >
                 {showPw ? <Eye size={20} /> : <EyeClosed size={20} />}
               </button>
             </div>
             {errors.password && (
-              <div className="text-pink-400 text-sm">
+              <div className="text-red-500 text-sm">
                 {errors.password.message}
               </div>
             )}
@@ -143,9 +169,7 @@ const SignupPage = () => {
               <input
                 {...register("passwordCheck")}
                 className={`bg-black border w-[300px] p-[10px] rounded-sm text-white
-                ${
-                  errors?.passwordCheck ? "border-pink-500" : "border-gray-500"
-                }`}
+                ${errors?.passwordCheck ? "border-red-500" : "border-white"}`}
                 type={showPwCheck ? "text" : "password"}
                 placeholder={"비밀번호 확인"}
               />
@@ -158,14 +182,22 @@ const SignupPage = () => {
               </button>
             </div>
             {errors.passwordCheck && (
-              <div className="text-pink-400 text-sm">
+              <div className="text-red-500 text-sm">
                 {errors.passwordCheck.message}
               </div>
             )}
 
             <button
               type="button"
-              className="w-full bg-pink-500 text-white py-3 rounded-md hover:bg-pink-600 transition-colors disabled:bg-gray-500 cursor-pointer"
+              className={`w-full py-3 rounded-md text-sm font-semibold
+                ${
+                  !password ||
+                  !passwordCheck ||
+                  errors.password ||
+                  errors.passwordCheck
+                    ? "bg-[#1b1b1b] text-gray-500 cursor-not-allowed"
+                    : "bg-[#ff2aa3] text-white hover:bg-pink-500 transition-colors"
+                }`}
               disabled={
                 !password ||
                 !passwordCheck ||
@@ -183,32 +215,33 @@ const SignupPage = () => {
           <>
             <div className="flex flex-col items-center gap-2 mb-2">
               <div
-                className="w-30 h-30 rounded-full bg-gray-700 border-2 border-gray-400 flex items-center justify-center"
+                className="w-28 h-28 rounded-full bg-gray-200 border border-white flex items-center justify-center"
                 title="프로필 이미지 업로드"
               >
-                <UserRound
-                  size={28}
-                  strokeWidth={2.5}
-                  className="text-gray-400"
-                />
+                <UserRound size={40} strokeWidth={2.5} className="text-white" />
               </div>
             </div>
             <input
               {...register("name")}
               className={`bg-black border w-[300px] p-[10px] rounded-sm text-white
-              ${errors?.name ? "border-pink-500" : "border-gray-500"}`}
+              ${errors?.name ? "border-red-500" : "border-white"}`}
               type={"text"}
               placeholder={"이름"}
             />
             {errors.name && (
-              <div className="text-pink-400 text-sm">{errors.name.message}</div>
+              <div className="text-red-500 text-sm">{errors.name.message}</div>
             )}
 
             <button
               type="button"
               onClick={handleSubmit(onSubmit)}
               disabled={isSubmitting || !name || !!errors.name}
-              className="w-full bg-pink-500 text-white py-3 rounded-md hover:bg-pink-600 transition-colors disabled:bg-gray-500 cursor-pointer"
+              className={`w-full py-3 rounded-md text-sm font-semibold
+                ${
+                  !name || errors.name
+                    ? "bg-[#1b1b1b] text-gray-500 cursor-not-allowed"
+                    : "bg-[#ff2aa3] text-white hover:bg-pink-500 transition-colors"
+                }`}
             >
               회원가입 완료
             </button>

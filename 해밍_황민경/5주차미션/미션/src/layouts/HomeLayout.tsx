@@ -1,25 +1,29 @@
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
 const HomeLayout = () => {
   return (
-    <div className="h-dvh flex flex-col">
-      <nav className="bg-gray-300 px-6 py-3 flex justify-between items-center">
-        <a href="/" className="text-md hover:text-pink">
-          HOME
-        </a>
-        <div className="space-x-4">
-          <a href="/login" className="text-sm hover:text-pink">
+    <div className="h-dvh flex flex-col bg-black">
+      <nav className="h-16 bg-[#111] text-[#ff1490] flex items-center justify-between px-4">
+        <div className="text-xl font-semibold">돌려돌려LP판</div>
+        <div className="space-x-2">
+          <Link
+            to="/login"
+            className="bg-black text-white text-sm px-3 py-1 rounded"
+          >
             로그인
-          </a>
-          <a href="/signup" className="text-sm hover:text-pink">
+          </Link>
+          <Link
+            to="/signup"
+            className="bg-[#ff1490] text-white text-sm px-3 py-1 rounded"
+          >
             회원가입
-          </a>
+          </Link>
         </div>
       </nav>
       <main className="flex-1">
         <Outlet />
       </main>
-      <footer className="bg-gray-300 py-6"></footer>
+      <footer>푸터</footer>
     </div>
   );
 };

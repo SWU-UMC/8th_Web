@@ -1,4 +1,8 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouteObject,
+  RouterProvider,
+} from "react-router-dom";
 import "./App.css";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
@@ -19,7 +23,7 @@ const publicRoutes: RouteObject[] = [
       { index: true, element: <HomePage /> },
       { path: "login", element: <LoginPage /> },
       { path: "signup", element: <SignupPage /> },
-      { path: "vq/auth/google/callback", element: <GoogleLoginRedirectPage /> },
+      { path: "v1/auth/google/callback", element: <GoogleLoginRedirectPage /> },
     ],
   },
 ];
@@ -38,12 +42,14 @@ const protectedRoutes: RouteObject[] = [
   },
 ];
 
-const router = createBrowserRouter([publicRoutes]);
+const router = createBrowserRouter([...publicRoutes, ...protectedRoutes]);
 
 function App() {
-  <AuthProvider>
-    return <RouterProvider router={router} />;
-  </AuthProvider>;
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />;
+    </AuthProvider>
+  );
 }
 
 export default App;
