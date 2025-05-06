@@ -58,6 +58,7 @@ const SignupPage = () => {
     const onSubmit: SubmitHandler<FormField> = async (data) => {
         const { passwordCheck, ...rest } = data;
         const response = await postSignup(rest);
+        navigate('/login');
         console.log(response);
     };
 
