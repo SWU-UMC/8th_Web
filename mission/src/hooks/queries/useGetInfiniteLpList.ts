@@ -13,8 +13,8 @@ function useGetInfiniteLpList(
       getLpList({ cursor: pageParam, limit, search, order }),
     queryKey: [QUERY_KEY.lps, search, order],
     initialPageParam: 0,
-    getNextPageParam: (lastPage, allPages) => {
-      console.log(lastPage, allPages);
+    getNextPageParam: (lastPage) => {
+      //console.log(lastPage, allPages);
       return lastPage.data.hasNext ? lastPage.data.nextCursor : undefined;
     },
   });

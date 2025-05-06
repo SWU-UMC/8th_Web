@@ -13,6 +13,9 @@ const HomePage = () => {
   //   limit: 50,
   // });
 
+  //정렬 코드
+  const [order, setOrder] = useState<PAGINATION_ORDER>(PAGINATION_ORDER.asc);
+
   const {
     data: lps,
     isFetching,
@@ -20,7 +23,7 @@ const HomePage = () => {
     isPending,
     fetchNextPage,
     isError,
-  } = useGetInfiniteLpList(10, search, PAGINATION_ORDER.asc);
+  } = useGetInfiniteLpList(10, search, order);
 
   //ref, inView
   //ref-> 특정한 HTML요소를 감시할 수 있다.
@@ -43,6 +46,28 @@ const HomePage = () => {
 
   return (
     <div className="container mx-auto px-4 py-6">
+      <div className="flex justify-end space-x-2 mb-4">
+        <button
+          onClick={() => setOrder(PAGINATION_ORDER.desc)}
+          className={`px-4 py-1 rounded-full border ${
+            order === PAGINATION_ORDER.desc
+              ? "bg-black text-white border-white"
+              : "bg-white text-black"
+          }`}
+        >
+          최신순
+        </button>
+        <button
+          onClick={() => setOrder(PAGINATION_ORDER.asc)}
+          className={`px-4 py-1 rounded-full border ${
+            order === PAGINATION_ORDER.asc
+              ? "bg-black text-white border-white"
+              : "bg-white text-black"
+          }`}
+        >
+          오래된순
+        </button>
+      </div>
       <input value={search} onChange={(e) => setSearch(e.target.value)} />
       <div
         className={
