@@ -11,6 +11,16 @@ export type Likes = {
   lpId: number;
 };
 
+export type Authors = {
+  id: number;
+  name: string;
+  email: string;
+  bio: string | null;
+  avatar: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 export type Lp = {
   id: number;
   title: string;
@@ -22,6 +32,7 @@ export type Lp = {
   updatedAt: Date;
   tags: Tag[];
   likes: Likes[];
+  author: Authors;
 };
 
 export type ResponseLpListDto = CursorBasedResponse<Lp[]>;

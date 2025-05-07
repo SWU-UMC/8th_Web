@@ -47,11 +47,11 @@ const Navbar = () => {
         <div className="flex items-center space-x-4">
           {!accessToken ? (
             <>
-              <Link to="/login" className="text-white hover:text-pink-400">
+              <Link to={"/login"} className="text-white hover:text-pink-400">
                 로그인
               </Link>
               <Link
-                to="/signup"
+                to={"/signup"}
                 className="bg-pink-500 text-white px-3 py-1 rounded hover:bg-pink-600"
               >
                 회원가입
@@ -60,7 +60,7 @@ const Navbar = () => {
           ) : (
             <>
               <span className="text-white">{name}님 반갑습니다.</span>
-              <Link to="/logout" className="text-white hover:text-pink-400">
+              <Link to={"/logout"} className="text-white hover:text-pink-400">
                 로그아웃
               </Link>
             </>

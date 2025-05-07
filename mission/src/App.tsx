@@ -15,6 +15,8 @@ import ProtectedLayout from "./layouts/ProtectedLayout.tsx";
 import GoogleLoginRedirectPage from "./pages/GoogleLoginRedirectPage.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import ProtectedRoute from "./components/ProtectedRoute.tsx";
+import LpDetailPage from "./pages/LpDetailPage.tsx";
 
 const publicRoutes: RouteObject[] = [
   {
@@ -39,6 +41,14 @@ const protectedRoutes: RouteObject[] = [
       {
         path: "my",
         element: <MyPage />,
+      },
+      {
+        path: "lp/:lpid",
+        element: (
+          <ProtectedRoute>
+            <LpDetailPage />
+          </ProtectedRoute>
+        ),
       },
     ],
   },
