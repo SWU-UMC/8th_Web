@@ -1,36 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import useGetComment from '../../hooks/queries/useGetComment'; // 댓글을 불러오는 훅
-import { Comment } from '../../types/comment';
-import CommentCard from './CommentCard'; // 위에서 만든 CommentCard 컴포넌트
+import CommentCard from './CommentCard';
 import { PAGINATION_ORDER } from '../../enums/common';
+import CommentCardSkeleton from './CommentCardSkeleton';
+import useGetInfiniteCommentList from '../../hooks/queries/useGetInfiniteCommentList';
+import { useInView } from 'react-intersection-observer';
+import SortOrderButton from '../SortOrderButton';
 
 interface CommentListProps {
     lpId: number;
 }
 
 const CommentList: React.FC<CommentListProps> = ({ lpId }) => {
-    // useGetComments 훅을 사용하여 댓글 리스트 불러오기
-    const savedSortOrder = localStorage.getItem("sortOrder") as PAGINATION_ORDER || "desc";
-    const [sortOrder, setSortOrder] = useState<PAGINATION_ORDER>(savedSortOrder);
-    
-    const { data, isLoading, isError } = useGetComment({
-        lpId,
-        paginationDto: {
-            cursor: 0,
-            limit: 10,
-            order: sortOrder,
-        },
-    });
+    const [sortOrder, setSortOrder] = useState<PAGINATION_ORDER>(PAGINATION_ORDER.desc);
+    const { ref, inView } = useInView();
 
-    
+    const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetInfiniteCommentList(lpId, { cursor: 0, limit: 3, order: sortOrder });
 
     useEffect(() => {
-        localStorage.setItem("sortOrder", sortOrder);
-    }, [sortOrder]);
+        if (inView && hasNextPage && !isFetchingNextPage) {
+            console.log("Fetching next page...");
+            fetchNextPage();
+        }
+    }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-    if (isLoading) {
-        return <p className="text-center text-gray-500">Loading comments...</p>;
-    }
+    if (isLoading)
+        return (
+            <>
+                {[...Array(3)].map((_, i) => (
+                    <CommentCardSkeleton key={i} />
+                ))}
+            </>
+        );
 
     if (isError) {
         return <p className="text-center text-red-500">Failed to load comments.</p>;
@@ -40,20 +40,7 @@ const CommentList: React.FC<CommentListProps> = ({ lpId }) => {
         <div>
             <div className="flex justify-between items-center my-4">
                 <h1 className="text-xl font-bold">댓글</h1>
-                <div className="flex border rounded-sm overflow-hidden w-40">
-                    <button
-                        onClick={() => setSortOrder(PAGINATION_ORDER.asc)}
-                        className={`flex-1 p-2 text-center text-xs ${sortOrder === PAGINATION_ORDER.asc ? "bg-white text-black font-bold" : "bg-black text-white"}`}
-                    >
-                        오래된 순
-                    </button>
-                    <button
-                        onClick={() => setSortOrder(PAGINATION_ORDER.desc)}
-                        className={`flex-1 p-2 text-center text-xs ${sortOrder === PAGINATION_ORDER.desc ? "bg-white text-black font-bold" : "bg-black text-white"}`}
-                    >
-                        최신 순
-                    </button>
-                </div>
+                <SortOrderButton sortOrder={sortOrder} setSortOrder={setSortOrder} />
             </div>
             <div className="mb-6">
                 <textarea
@@ -70,11 +57,28 @@ const CommentList: React.FC<CommentListProps> = ({ lpId }) => {
                 </div>
             </div>
             <div className="space-y-4">
+                {data?.pages.flatMap((page, pageIndex) => {
+                    if (Array.isArray(page.data)) {
+                        return page.data.map((comment) => (
+                            <CommentCard key={`${comment.id}-${pageIndex}`} comment={comment} />
+                        ));
+                    }
+                    return [];
+                })}
 
-                {data?.map((comment: Comment) => (
-                    <CommentCard key={comment.id} comment={comment} />
-                ))}
+                {isFetchingNextPage && (
+                    <div className="text-center my-4">
+                        {[...Array(3)].map((_, i) => (
+                            <CommentCardSkeleton key={i} />
+                        ))}
+                    </div>
+                )}
+
+                {hasNextPage && !isFetchingNextPage && (
+                    <div ref={ref} className="h-1" />
+                )}
             </div>
+
         </div>
 
     );

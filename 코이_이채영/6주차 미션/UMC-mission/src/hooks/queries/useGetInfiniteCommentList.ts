@@ -1,20 +1,26 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { getLpList } from "../../apis/lp";
+import { getComments } from "../../apis/comment";
 import { QUERY_KEY } from "../../constants/key";
 import { PaginationDto } from "../../types/common";
 
-function useGetInfiniteLpList(
+function useGetInfiniteCommentList(
+  lpId: number,
   paginationDto: PaginationDto // paginationDto를 받도록 수정
 ) {
   return useInfiniteQuery({
-    queryFn: ({ pageParam }) => getLpList({ ...paginationDto, cursor: pageParam }), // cursor 값을 paginationDto에 덧붙여서 사용
-    queryKey: [QUERY_KEY.lps, paginationDto.search, paginationDto.order], // paginationDto를 키에 포함
+    queryKey: [QUERY_KEY.comments, lpId, paginationDto.order], // 정렬 기준도 키에 포함
+    queryFn: async ({ pageParam = 0 }) => {
+
+      const response = await getComments({lpId, paginationDto: { ...paginationDto, cursor: pageParam }});
+
+      
+      return response.data;
+    },
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
-      console.log(lastPage);
-      return lastPage.data.hasNext ? lastPage.data.nextCursor : undefined;
+      return lastPage.hasNext ? lastPage.nextCursor : undefined;
     },
   });
 }
 
-export default useGetInfiniteLpList;
+export default useGetInfiniteCommentList;

@@ -69,8 +69,8 @@ const LpDetailPage = () => {
                 </div>
 
                 <div className="flex justify-between items-center mt-8">
-                    <h1 className="text-2xl font-bold mr-8">{lpData.title}</h1>
-                    
+                    <h1 className="text-2xl text-left font-bold mr-8">{lpData.title}</h1>
+
                     <div className="flex gap-4">
                         <button onClick={handleEdit} className="text-xl">
                             <FaEdit />
@@ -96,8 +96,10 @@ const LpDetailPage = () => {
                     </div>
                 </div>
 
-                <div className="mb-4">
-                    <p>{lpData.content}</p>
+                <div className="mb-8 text-left">
+                    <div className="bg-[#2c2c2c] p-5 rounded-md border border-gray-300 leading-relaxed shadow-md">
+                        <p className="whitespace-pre-wrap text-sm text-gray-200">{lpData.content}</p>
+                    </div>
                 </div>
 
                 <div className="mb-4">
