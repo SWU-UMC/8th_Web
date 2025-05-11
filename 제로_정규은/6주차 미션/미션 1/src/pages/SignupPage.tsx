@@ -5,7 +5,7 @@ import { z } from "zod"
 import { postSignup } from "../apis/auth";
 import { useState } from "react";
 
-// validate.ts 에서 해야하는 과정 간단히
+
 const schema = z.object({
   email: z.string().email({message: "올바른 이메일 형식이 아닙니다."}),
   password: z
@@ -51,7 +51,7 @@ const SignupPage = () => {
   });
 
   const onSubmit:SubmitHandler<FormFields> = async (data) => {
-    const { passwordCheck, ...rest} = data; // pwCheck 제외한 나머지 전송
+    const { passwordCheck, ...rest} = data; 
 
     const response = await postSignup(rest);
     navigate("/login");
@@ -65,12 +65,12 @@ const SignupPage = () => {
     <div className="flex flex-col items-center justify-center h-full gap-4 ">
       <div className="flex flex-col gap-3">
         <div className="relative flex items-center mb-6">
-          <img 
-            className="absolute w-5 h-5"
-            src="src/assets/arrow.svg"
-            onClick={() => {navigate(-1)}}
-            style={{ cursor: "pointer" }}
-          />
+        <button 
+    onClick={() => navigate(-1)} 
+    className="absolute left-0 text-2xl text-gray-600 hover:text-gray-800 px-2 cursor-pointer"
+  >
+    {"<"}
+  </button>
           <div className="mx-auto text-xl font-bold">
             회원가입
           </div>
@@ -107,7 +107,7 @@ const SignupPage = () => {
           />
           <img 
             className="absolute w-5 cursor-pointer mx-auto right-3"
-            src={isShowPassword ? "src/assets/eyeopen.svg" : "src/assets/eyeclose.svg"} 
+            src={isShowPassword ? "src/assets/pwopen.svg" : "src/assets/pwclose.svg"} 
             onClick={() => setIsShowPassword(!isShowPassword)}
           />
         </div>
@@ -123,7 +123,7 @@ const SignupPage = () => {
           />
           <img 
               className="absolute w-5 cursor-pointer mx-auto right-3"
-              src={isShowPassword ? "src/assets/eyeopen.svg" : "src/assets/eyeclose.svg"} 
+              src={isShowPassword ? "src/assets/pwopen.svg" : "src/assets/pwclose.svg"} 
               onClick={() => setIsShowPassword(!isShowPassword)}
           />
         </div>

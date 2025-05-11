@@ -4,7 +4,6 @@ import { ResponseMyInfoDto } from "../types/auth";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
-
 const MyPage = () => {
     
     const navigate = useNavigate();
@@ -18,7 +17,6 @@ const MyPage = () => {
   
               setData(response);
           };
-  
           getData();
       }, []);
   

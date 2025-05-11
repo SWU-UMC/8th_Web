@@ -31,7 +31,7 @@ const Navbar = () => {
       </div>
     )}
     {accessToken && (
-        <Link to={'/my'}
+        <Link to={'/mypage'}
         className="text-gray-700 dark:text-gray-300 hover:text-blue-500"
         >마이 페이지
 

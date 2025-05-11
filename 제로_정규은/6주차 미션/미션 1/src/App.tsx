@@ -11,6 +11,7 @@ import { AuthProvider } from './context/AuthContext'
 import GoogleLoginRedirectPage from './pages/GoogleLoginRedirectPage'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import LpDetailPage from './pages/LpDetailPage'
 
 //publicRoutes
 const publicRoutes:RouteObject[] =[
@@ -35,6 +36,9 @@ const protectedRoutes:RouteObject[]=[
     children:[
       {
         path: 'mypage', element:<MyPage/>,
+      },
+      {
+        path: 'lp/:lpId', element: <LpDetailPage />,
       }
     ]
   }

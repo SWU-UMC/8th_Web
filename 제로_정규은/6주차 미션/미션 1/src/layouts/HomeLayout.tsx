@@ -1,15 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Footer from "../components/Footer";
 import { MdArrowBack, MdMenu, MdPerson, MdSearch } from "react-icons/md";
+import { getMyInfo } from "../apis/auth"; 
+import { ResponseMyInfoDto } from "../types/auth"; 
 
 const HomeLayout = () => {
   const { accessToken, logout } = useAuth();
   const navigate = useNavigate();
-  const name = localStorage.getItem("myName");
-
+  
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // 사이드바 상태 관리
+  const [data, setData] = useState<ResponseMyInfoDto>();
+
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const res = await getMyInfo();
+      setData(res);
+    } catch (error) {
+      console.error("유저 정보 가져오기 실패:", error);
+    }
+  };
+
+  if (accessToken) {
+    fetchData();
+  }
+}, [accessToken]);
+
+
 
   const handleLogoClick = () => {
     navigate("/");
@@ -23,11 +42,11 @@ const HomeLayout = () => {
   };
 
   const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen); // 사이드바 열기/닫기 토글
+    setIsSidebarOpen(!isSidebarOpen); //사이드바 열기&닫기 토글
   };
 
   const closeSidebar = () => {
-    setIsSidebarOpen(false); // 사이드바 닫기
+    setIsSidebarOpen(false); //사이드바 닫기
   };
 
   return (
@@ -62,7 +81,7 @@ const HomeLayout = () => {
             <button
               className="flex items-center text-white py-2 px-4 text-sm cursor-pointer"
               onClick={() => {
-                navigate("/my");
+                navigate("/mypage");
                 closeSidebar(); // 사이드바 닫기
               }}
             >
@@ -71,7 +90,7 @@ const HomeLayout = () => {
             <button
               className="items-center text-white py-2 px-4 text-xs cursor-pointer mt-auto"
               onClick={() => {
-                navigate("/my");
+                navigate("/mypage");
                 closeSidebar(); // 사이드바 닫기
               }}
             >
@@ -101,7 +120,7 @@ const HomeLayout = () => {
             <div className="px-3 cursor-pointer">
               <MdSearch />
             </div>
-            {accessToken && <div className="text-sm">{name}님 반갑습니다.</div>}
+            {accessToken && <div className="text-sm">{data?.data.name}님 반갑습니다.</div>}
             <button
               className="text-white py-2 mx-1 p-[10px] rounded-sm text-sm cursor-pointer"
               onClick={handleButtonClick}

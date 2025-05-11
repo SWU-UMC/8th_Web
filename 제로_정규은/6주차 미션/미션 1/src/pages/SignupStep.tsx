@@ -71,7 +71,7 @@ const SignupStep = () => {
           <div className="mx-auto text-xl font-bold">회원가입</div>
         </div>
 
-        {/* 1단계: 이메일 입력 */}
+        {/*1단계: 이메일 입력*/}
         {step === 1 && (
           <div className="flex flex-col gap-3">
             <input
@@ -88,8 +88,8 @@ const SignupStep = () => {
               type="button"
               onClick={() => {
                 if (!errors.email) {
-                  setEmailValue(getValues("email")); // 이메일 값 저장
-                  setStep(2); // 다음 단계로 이동
+                  setEmailValue(getValues("email")); //이메일 값 저장
+                  setStep(2); //다음 단계로 이동
                 }
               }}
               disabled={!!errors.email}
@@ -100,10 +100,10 @@ const SignupStep = () => {
           </div>
         )}
 
-        {/* 2단계: 비밀번호 입력 */}
+        {/*2단계: 비밀번호 입력*/}
         {step === 2 && (
           <div className="flex flex-col gap-3">
-            {/* 이메일 표시 */}
+            {/*이메일 표시*/}
             <div className="flex items-center gap-2 mb-2">
               <MdEmail className="mx-1"/>
               <div >
@@ -150,7 +150,7 @@ const SignupStep = () => {
               type="button"
               onClick={() => {
                 if (!errors.password && !errors.passwordCheck) {
-                  setStep(3); // 다음 단계로 이동
+                  setStep(3); //다음 단계로 이동
                 }
               }}
               disabled={!!errors.password || !!errors.passwordCheck}
@@ -161,7 +161,7 @@ const SignupStep = () => {
           </div>
         )}
 
-        {/* 3단계: 이름 입력 */}
+        {/*3단계: 이름 입력*/}
         {step === 3 && (
           <div className="flex flex-col gap-3 items-center">
             <div className="flex items-center justify-center w-60 h-60 bg-gray-100 rounded-full my-4">

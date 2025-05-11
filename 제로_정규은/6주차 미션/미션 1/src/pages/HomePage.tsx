@@ -31,7 +31,7 @@ const HomePage = () => {
 
   const handleCardClick = (lpId: number) => {
     if (!isAuthenticated) {
-      window.alert("로그인이 필요한 서비스입니다. 로그인을 해주세요!!")
+      window.alert("로그인이 필요한 서비스입니다. 로그인을 해주세요!")
       navigate("/login"); // 로그인 페이지로 이동
     } else {
       navigate(`/lp/${lpId}`);

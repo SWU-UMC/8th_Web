@@ -75,7 +75,7 @@ const ProtectedLayout = () => {
                 <button
                   className="flex items-center text-white py-2 px-4 text-sm cursor-pointer"
                   onClick={() => {
-                    navigate("/my");
+                    navigate("/mypage");
                     closeSidebar(); // 사이드바 닫기
                   }}
                 >
@@ -84,7 +84,7 @@ const ProtectedLayout = () => {
                 <button
                   className="items-center text-white py-2 px-4 text-xs cursor-pointer mt-auto"
                   onClick={() => {
-                    navigate("/my");
+                    navigate("/mypage");
                     closeSidebar(); // 사이드바 닫기
                   }}
                 >
