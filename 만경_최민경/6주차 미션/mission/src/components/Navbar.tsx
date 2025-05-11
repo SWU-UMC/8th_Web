@@ -2,6 +2,7 @@ import { Link } from "react-router-dom"
 import { useAuth } from "../context/AuthContext";
 import { useEffect, useState } from "react";
 import { getMyInfo } from "../apis/auth";
+import { FiMenu } from "react-icons/fi"; 
 
 interface NavbarProps {
   onToggleSidebar?: () => void;
@@ -31,6 +32,7 @@ const Navbar = ({ onToggleSidebar }: NavbarProps) => {
 
   const handleLogout = async () => {
     await logout();
+    
   };
 
   
@@ -39,17 +41,15 @@ const Navbar = ({ onToggleSidebar }: NavbarProps) => {
   return (
     <nav className="bg-white dark:bg-gray-900 shadow-md fixed w-full z-10">
       <div className="flex items-center justify-between p-4">
-      <div className="flex items-center">
-          {accessToken && (
-            <button 
-              onClick={onToggleSidebar}
-              className="mr-4 text-gray-700 dark:text-gray-300 hover:text-blue-500"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
-              </svg>
-            </button>
-          )}
+        <div className="flex items-center">
+          
+          <button 
+            onClick={onToggleSidebar}
+            className="mr-4 text-gray-700 dark:text-gray-300 hover:text-blue-500 focus:outline-none"
+            aria-label="메뉴 열기"
+          >
+            <FiMenu size={24} />
+          </button>
           <Link
             to="/"
             className="text-xl font-bold text-gray-900 dark:text-white"

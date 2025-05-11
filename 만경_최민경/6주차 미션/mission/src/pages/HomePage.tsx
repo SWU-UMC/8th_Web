@@ -10,11 +10,7 @@ import LpCardSkeletonList from "../components/LpCard/LpCardSkeletonList";
 const HomePage = () => {
   const [search,setSearch]=useState("")
   const [order, setOrder] = useState(PAGINATION_ORDER.desc);
-  // const {data,isPending,isError}=useGetLpList({
-  //   search,
-  //   limit:50
-  // })\
-  const {data:lps,isFetching,hasNextPage,isPending,fetchNextPage,isError}=
+  const {data:lps,isFetching,hasNextPage, isPending, fetchNextPage, isError}=
   useGetInfiniteLpList(10, search, order);
 
   //ref: 특정한 HTML 요소를 감시할 수 있다.
@@ -40,7 +36,7 @@ const HomePage = () => {
 
   return (
     <>
-      <div className="flex justify-end items-center mb-4 mt-6 gap-3">
+      <div className="flex justify-end items-center animate-blink mb-4 mt-6 gap-3">
         <button
           className={`px-3 py-1 text-sm cursor-pointer rounded-md mr-2 transition-colors ${
             order === PAGINATION_ORDER.asc
