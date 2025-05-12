@@ -1,7 +1,7 @@
 import { useInView } from "react-intersection-observer";
-import useGetInfiniteCommentList from "../hooks/queries/useGetInfiniteCommentList";
-import CommentSkeleton from "./CommentSkeleton";
 import { useEffect } from "react";
+import useGetInfiniteCommentList from "../../hooks/queries/useGetInfiniteCommentList";
+import CommentSkeleton from "./CommentSkeleton";
 
 const CommentList = ({
   lpId,

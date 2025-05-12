@@ -2,8 +2,8 @@ import { useParams } from "react-router-dom";
 import useGetLpDetail from "../hooks/queries/useGetLpDetail";
 import { formatDistanceToNow } from "date-fns";
 import { useState } from "react";
-import CommentList from "../components/CommentList";
-import CommentInput from "../components/CommentInput";
+import CommentList from "../components/Comment/CommentList";
+import CommentInput from "../components/Comment/CommentInput";
 
 const LpDetailPage = () => {
   const { lpid } = useParams();
