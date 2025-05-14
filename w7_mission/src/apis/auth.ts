@@ -42,3 +42,9 @@ export const updateMyInfo = async (
   const { data } = await axiosInstance.patch("/v1/users", body);
   return data;
 };
+
+//탈퇴하기 생성
+export const deleteUser = async (): Promise<CommonResponse<null>> => {
+  const { data } = await axiosInstance.delete("/v1/users");
+  return data;
+};

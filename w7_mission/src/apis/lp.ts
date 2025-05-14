@@ -1,4 +1,4 @@
-import { PaginationDto } from "../types/common";
+import { CommonResponse, PaginationDto } from "../types/common";
 import {
   CreateLpDto,
   RequestLpDto,
@@ -63,4 +63,21 @@ export const uploadImage = async (file: File): Promise<string> => {
   });
 
   return data.data.imageUrl;
+};
+
+//Lp 수정
+export const patchLp = async (
+  lpId: number,
+  body: CreateLpDto
+): Promise<ResponseCreateLpDto> => {
+  const { data } = await axiosInstance.patch(`/v1/lps/${lpId}`, body);
+  return data;
+};
+
+//Lp 삭제
+export const deleteLp = async (
+  lpId: number
+): Promise<CommonResponse<boolean>> => {
+  const { data } = await axiosInstance.delete(`/v1/lps/${lpId}`);
+  return data;
 };
