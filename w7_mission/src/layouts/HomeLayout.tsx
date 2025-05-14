@@ -1,8 +1,11 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import LpModal from "../components/LpCard/LpModal";
+import { useState } from "react";
 
 const HomeLayout = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <div className="h-dvh flex flex-col">
       <Navbar />
@@ -10,38 +13,18 @@ const HomeLayout = () => {
         <Outlet />
       </main>
       <Footer />
+      {/* ➕버튼 */}
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="fixed bottom-15 right-15 bg-pink-600 text-white rounded-full w-14 h-14 text-3xl flex items-center justify-center shadow-lg z-[999] cursor-pointer"
+      >
+        +
+      </button>
+
+      {/* 모달 */}
+      {isModalOpen && <LpModal onClose={() => setIsModalOpen(false)} />}
     </div>
   );
 };
-
-// import { Link, Outlet } from "react-router-dom";
-
-// const HomeLayout = () => {
-//   return (
-//     <div className="h-dvh flex flex-col bg-black">
-//       <nav className="h-16 bg-[#111] text-[#ff1490] flex items-center justify-between px-4">
-//         <div className="text-xl font-semibold">돌려돌려LP판</div>
-//         <div className="space-x-2">
-//           <Link
-//             to="/login"
-//             className="bg-black text-white text-sm px-3 py-1 rounded"
-//           >
-//             로그인
-//           </Link>
-//           <Link
-//             to="/signup"
-//             className="bg-[#ff1490] text-white text-sm px-3 py-1 rounded"
-//           >
-//             회원가입
-//           </Link>
-//         </div>
-//       </nav>
-//       <main className="flex-1">
-//         <Outlet />
-//       </main>
-//       <footer>푸터</footer>
-//     </div>
-//   );
-// };
 
 export default HomeLayout;

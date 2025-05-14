@@ -1,6 +1,7 @@
 import {
   RequestSigninDto,
   RequestSignupDto,
+  RequestUpdateMyInfoDto,
   ResponseMyInfoDto,
   ResponseSigninDto,
   ResponseSignupDto,
@@ -31,5 +32,13 @@ export const getMyInfo = async (): Promise<ResponseMyInfoDto> => {
 
 export const postLogout = async () => {
   const { data } = await axiosInstance.post("/v1/auth/signout");
+  return data;
+};
+
+//myPage 수정
+export const updateMyInfo = async (
+  body: RequestUpdateMyInfoDto
+): Promise<ResponseMyInfoDto> => {
+  const { data } = await axiosInstance.patch("/v1/users", body);
   return data;
 };
