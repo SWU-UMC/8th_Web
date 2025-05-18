@@ -45,3 +45,9 @@ export type ResponseMyInfoDto=CommonResponse<{
 
 }>
 
+export type UpdateUserInfoDto = { 
+  name?: string; 
+  bio?: string; 
+  avatar?: string;
+}
+

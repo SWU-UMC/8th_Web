@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FiSearch, FiUser, FiLogOut } from "react-icons/fi";
 import WithdrawalModal from "./WithdrawalModal";
+import { useDeleteUser } from "../hooks/mutation/useDeleteUser";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -9,6 +10,7 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
+  const { mutate: handleDeleteUser } = useDeleteUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
   
   
@@ -22,13 +24,17 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     setIsModalOpen(false);
   };
   
-  // 탈퇴 확인 시 실행할 함수
   const handleWithdrawal = () => {
-    // 실제 탈퇴 처리 로직 구현..
-    console.log("회원 탈퇴 처리");
-    setIsModalOpen(false);
-    // 탈퇴 후 어디 페이지로..?
-  };
+  handleDeleteUser(undefined, {
+    onSuccess: () => {
+      setIsModalOpen(false);     
+      location.href = '/';      
+    },
+    onError: () => {
+      alert('탈퇴에 실패했습니다.');
+    },
+  });
+};
 
   // Escape 키로 사이드바 닫기 기능 추가
   useEffect(() => {

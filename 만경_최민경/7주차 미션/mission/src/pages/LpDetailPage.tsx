@@ -5,13 +5,12 @@ import { Likes, Tag } from "../types/lp";
 import { FaHeart, FaRegHeart,FaCheckSquare } from 'react-icons/fa';
 import useGetMyInfo from "../hooks/queries/useGetMyInfo";
 import { useAuth } from "../context/AuthContext";
-import usePostLike from "../hooks/muations/usePostLike";
-import useDeleteLike from "../hooks/muations/useDeleteLike";
+
 import { useEffect, useState } from "react";
 import { queryClient } from "../App";
 import { MdEdit, MdCancel, MdDelete} from "react-icons/md";
-
-
+import usePostLike from "../hooks/mutation/usePostLike";
+import useDeleteLike from "../hooks/mutation/useDeleteLike";
 
 
 const LpDetailPage = () => {
@@ -90,9 +89,9 @@ const LpDetailPage = () => {
 
   const handleCancelEdit = () => {
     if (!lp) return; 
-  setEditTitle(lp.title);  // 원래 제목으로 복구
-  setLpImage(lp.thumbnail);    // 원래 이미지로 복구 (이미지도 같이)
-  setIsEditing(false);         // 편집모드 종료
+  setEditTitle(lp.title);  
+  setLpImage(lp.thumbnail);    
+  setIsEditing(false);        
   };
 
   useEffect(() => {
@@ -146,11 +145,11 @@ const LpDetailPage = () => {
             <h1 className="text-2xl font-bold">{lp.title}</h1>
           )}
           
-          <div className="flex gap-2">
+          <div className=" flex gap-2">
             {!isEditing ? (
               <>
-                <button onClick={toggleEditMode} className="text-black">
-                  <MdEdit className="w-5 h-5" />
+                <button onClick={toggleEditMode} className="cursor-pointer text-black">
+                  <MdEdit className="w-5 h-5"  />
                 </button>
                 <button 
                   className="px-3 py-1 text-black rounded-md text-sm cursor-pointer "

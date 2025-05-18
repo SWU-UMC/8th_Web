@@ -1,4 +1,4 @@
-import { RequestLpDto, ResponseLikeLpDto } from './../types/lp';
+import { CreateLpRequest, CreateLpResponse, RequestLpDto, ResponseLikeLpDto, ResponseLpDto } from './../types/lp';
 import { PaginationDto } from "../types/common";
 import {  ResponseLpDetailDto, ResponseLpListDto } from "../types/lp";
 import { axiosInstance } from "./axios";
@@ -36,5 +36,22 @@ export const deleteLike=async({
     return data;
 }
 
+export const createLp = async ({
+    title,
+    content,
+    thumbnail,
+    tags,
+    published,
+}: CreateLpRequest): Promise<CreateLpResponse> => {
+    const { data } = await axiosInstance.post('/v1/lps', {
+        title,
+        content,
+        thumbnail,
+        tags,
+        published,
+    });
+
+    return data;
+};
 
    

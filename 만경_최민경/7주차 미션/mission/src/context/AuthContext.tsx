@@ -2,7 +2,8 @@ import { createContext, PropsWithChildren, useContext, useState } from "react";
 import { RequestSigninDto } from "../types/auth";
 import { LOCAL_STORAGE_KEY } from "../constants/key";
 import { useLocalStorage } from "../hooks/useLocalStorage";
-import { postLogout, postSignin } from "../apis/auth";
+import { getMyInfo, postLogout, postSignin } from "../apis/auth";
+import { Navigate } from "react-router-dom";
 
 
 interface AuthContextType{
@@ -10,6 +11,8 @@ interface AuthContextType{
     refreshToken: string|null;
     login: (signInData: RequestSigninDto)=> Promise<void>;
     logout: ()=> Promise<void>;
+    userName: string;
+    setUserName: (name: string) => void;
 }
 
 export const AuthContext=createContext<AuthContextType>({
@@ -17,6 +20,9 @@ export const AuthContext=createContext<AuthContextType>({
     refreshToken: null,
     login: async ()=> {},
     logout: async ()=> {},
+    userName: "",               
+    setUserName: () => {}, 
+    
 });
 
 export const AuthProvider=({children}: PropsWithChildren)=> {
@@ -39,6 +45,9 @@ export const AuthProvider=({children}: PropsWithChildren)=> {
     const[refreshToken,setRefreshToken]=useState<string|null>(
         getRefreshTokenFromStorage(),
     )
+
+    const [userName, setUserName] = useState<string>("");
+
     const login=async(signinData: RequestSigninDto)=>{
      try{
         const{data}=await postSignin(signinData) 
@@ -52,8 +61,10 @@ export const AuthProvider=({children}: PropsWithChildren)=> {
 
             setAccessToken(newAccessToken);
             setRefreshToken(newRefreshToken);
-            alert("로그인 성공")
-            window.location.href = '/';
+            
+            alert("로그인 성공");
+            window.location.href = "/"; // 로그인 후 리디렉션
+            
         }
         } catch(error){
         console.error("로그인 오류")
@@ -69,6 +80,7 @@ export const AuthProvider=({children}: PropsWithChildren)=> {
 
             setAccessToken(null);
             setRefreshToken(null);
+            setUserName("");
 
             alert("로그아웃 성공")
 
@@ -79,7 +91,7 @@ export const AuthProvider=({children}: PropsWithChildren)=> {
         }
     }
     return(
-        <AuthContext.Provider value={{accessToken,refreshToken,login,logout}}>
+        <AuthContext.Provider value={{accessToken,refreshToken,login,logout,userName, setUserName}}>
             {children}
         </AuthContext.Provider>
     )

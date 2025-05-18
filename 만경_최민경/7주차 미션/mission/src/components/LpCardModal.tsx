@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import defaultLp from '../assets/default_lp.png';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios, { CreateAxiosDefaults } from 'axios';
+
+
+import { CreateLpRequest } from '../types/lp';
+import { useLpCreate } from '../hooks/mutation/useLpCreate';
 
 
 interface LpModalProps {
@@ -12,15 +15,12 @@ interface LpModalProps {
   imageFile: File|null; //이미지 파일 추가
 }
 
-interface CreateLpData{
-  name: string;
-  content: string;
-  tags: string[];
-  image?: File;
-}
+
+
 const LpModal: React.FC<LpModalProps> = ({ 
   isOpen, onClose, lpImage, onImageChange }) => { 
-   const queryClient=useQueryClient();
+  const queryClient=useQueryClient();
+  const createLpMutation = useLpCreate();
   
   const [lpName, setLpName] = useState('');
   const [lpContent, setLpContent] = useState('');
@@ -28,51 +28,7 @@ const LpModal: React.FC<LpModalProps> = ({
   const [tags, setTags] = useState<string[]>([]);
   const [lpImageFile, setLpImageFile] = useState<File | null>(null);
 
-  const createLpMutaion=useMutation({
-    mutationFn: async(data: CreateLpData)=>{
-      const formData=new FormData();
-      formData.append('name',data.name)
-      formData.append('content', data.content);
-
-      data.tags.forEach(tag=> {
-        formData.append('tags',tag);
-      })
-
-      // 이미지 파일 추가
-      if (data.image) {
-        formData.append('image', data.image);
-      }
-      const response = await axios.post('/v1/lps', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      
-      return response.data;
-    },
-    onSuccess: () => {
-      // 성공 시 쿼리 무효화하여 LP 목록 갱신
-      queryClient.invalidateQueries({ queryKey: ['lps'] });
-      
-      // 폼 초기화
-      setLpName('');
-      setLpContent('');
-      setTags([]);
-      
-      // 모달 닫기
-      onClose();
-      
-      // 성공 메시지 (선택사항)
-      alert('LP가 성공적으로 추가되었습니다!');
-    },
-    onError: (error) => {
-      // 에러 처리
-      console.error('LP 생성 실패:', error);
-      alert('LP를 추가하는 데 문제가 발생했습니다.');
-      
-    }
-  })
-
+  
   const handleAddTag = () => {
     if (tagInput.trim() === '') return;
     if (tags.includes(tagInput.trim())) return; // 중복 방지
@@ -92,18 +48,19 @@ const LpModal: React.FC<LpModalProps> = ({
       return;
     }
 
-    // LP 데이터 생성
-    const lpData: CreateLpData = {
-      name: lpName,
-      content: lpContent,
-      tags: tags,
-    };
-
-    // Mutation 실행
-    createLpMutaion.mutate(lpData);
+  const lpData: CreateLpRequest = {
+    title: lpName,
+    content: lpContent,
+    tags,
+    published: true,
+    thumbnail: lpImageFile,
+  };
+  createLpMutation.mutate(lpData);
   };
 
   if (!isOpen) return null;
+
+    
 
   return (
   <div 
@@ -190,11 +147,11 @@ const LpModal: React.FC<LpModalProps> = ({
           ))}
         </div>
         
-        <button className="bg-gray-500 py-2 rounded mt-4 hover:bg-gray-600"
+        <button className="bg-pink-500 py-2 rounded mt-4 hover:bg-pink-600"
         onClick={handleSubmitLp}
-        disabled={createLpMutaion.isPending}
+        disabled={createLpMutation.isPending}
         >
-          {createLpMutaion.isPending? '추가 중...' : "Add LP"}
+          {createLpMutation.isPending? '추가 중...' : "Add LP"}
           
         </button>
       </div>

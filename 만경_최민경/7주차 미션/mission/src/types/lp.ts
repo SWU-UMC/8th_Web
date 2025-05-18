@@ -41,6 +41,7 @@ export type ResponseLpListDto=CursorBasedResponse<Lp[]>
 
 export type RequestLpDto={
     lpId:number;
+  
 }
 
 export type ResponseLpDto=CommonResponse<{}>
@@ -69,3 +70,30 @@ export type ResponseLikeLpDto= CommonResponse<{
     userId: number;
     lpId: number;
 }>
+
+
+
+
+export interface CreateLpRequest {
+  title: string;
+  content: string;
+  tags: string[];
+  published: boolean;
+  thumbnail?: File | null;
+}
+
+export interface CreateLpResponse {
+  status: boolean;
+  statusCode: number;
+  message: string;
+  data: {
+    id: number;
+    title: string;
+    content: string;
+    thumbnail: string;
+    published: boolean;
+    authorId: number;
+    createdAt: string;
+    updatedAt: string;
+  };
+}

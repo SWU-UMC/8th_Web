@@ -5,7 +5,11 @@ import CommentCardSkeletonList from "./CommentCardSkeletonList";
 import useGetInfiniteCommentList from "../../hooks/queries/useGetInfiniteCommentList";
 import { PAGINATION_ORDER } from "../../enums/common";
 import CommentItem from "./CommentItem";
-import usePostComment from "../../hooks/muations/usePostComment";
+import usePostComment from "../../hooks/mutation/usePostComment";
+import useDeleteComment from "../../hooks/mutation/useDeleteComment";
+import useUpdateComment from "../../hooks/mutation/useUpdateComment";
+
+
 
 
 
@@ -23,11 +27,11 @@ const CommentCard: React.FC<CommentCardProps> = ({ lpId }) => {
   
 
  
-const order = sortType === "latest" ? PAGINATION_ORDER.desc : PAGINATION_ORDER.asc;
-const {
-    isLoading,
-    isFetching,
-  } = useGetInfiniteCommentList(lpId, 10, "", order);
+  const order = sortType === "latest" ? PAGINATION_ORDER.desc : PAGINATION_ORDER.asc;
+  const {
+      isLoading,
+      isFetching,
+    } = useGetInfiniteCommentList(lpId, 10, "", order);
 
   const commentMutation = usePostComment(lpId);
 
@@ -43,6 +47,7 @@ const {
       setLoading(false);
     }
   };
+
 
   useEffect(() => {
     fetchComments();
@@ -64,6 +69,43 @@ const {
       }
     });
   };
+
+  const deleteMutation = useDeleteComment();
+  const updateMutation = useUpdateComment();
+
+  const handleDelete = (commentId: number) => {
+  if (window.confirm("댓글을 삭제하시겠습니까?")) {
+    deleteMutation.mutate(
+      { lpId, commentId },  // ← 이렇게 구조를 맞춰야 해
+      {
+        onSuccess: () => {
+          fetchComments();
+        },
+        onError: (error) => {
+          console.error("댓글 삭제 실패:", error);
+          setError("댓글 삭제에 실패했습니다.");
+        },
+      }
+    );
+  }
+};
+
+  const handleEdit = (commentId: number, newText: string) => {
+  updateMutation.mutate(
+    { lpId, commentId, content: newText }, // ← lpId 포함!
+    {
+      onSuccess: () => {
+        fetchComments();
+      },
+      onError: (error: unknown) => {
+      const message = error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.";
+      console.error("댓글 삭제 실패:", message);
+      setError(message);
+    }
+    },
+  );
+};
+
 
 
 
@@ -129,7 +171,12 @@ const {
         ) : (
           <ul className="space-y-4">
             {comments.map((comment) => (
-              <CommentItem key={comment.id} comment={comment} />
+                <CommentItem
+                key={comment.id}
+                comment={comment}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
             ))}
           </ul>
         )}

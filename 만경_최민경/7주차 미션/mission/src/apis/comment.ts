@@ -27,3 +27,30 @@ export const postComment = async (
   await axiosInstance.post(`/v1/lps/${lpId}/comments`, { content });
 };
 
+export const updateComment = async ({
+  lpId,
+  commentId,
+  content,
+}: {
+  lpId: number;
+  commentId: number;
+  content: string;
+}) => {
+  const { data } = await axiosInstance.patch(`/v1/lps/${lpId}/comments/${commentId}`, {
+    content,
+  });
+
+  return data;
+};
+
+export const deleteComment = async ({
+  lpId,
+  commentId,
+}: {
+  lpId: number,
+  commentId: number;
+}): Promise<{ message: string }> => {
+  const { data } = await axiosInstance.delete(`/v1/lps/${lpId}/comments/${commentId}`);
+  return data.data;
+};
+

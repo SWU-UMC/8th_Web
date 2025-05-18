@@ -1,36 +1,17 @@
 import { Link } from "react-router-dom"
 import { useAuth } from "../context/AuthContext";
-import { useEffect, useState } from "react";
-import { getMyInfo } from "../apis/auth";
 import { FiMenu } from "react-icons/fi"; 
-import useLogout from "../hooks/muations/useLogout";
+import useLogout from "../hooks/mutation/useLogout";
+
+
 
 interface NavbarProps {
   onToggleSidebar?: () => void;
 }
 
 const Navbar = ({ onToggleSidebar }: NavbarProps) => {
-  const { accessToken,logout } = useAuth();
-  const [userName, setUserName] = useState<string>("");
+  const { accessToken,logout, userName } = useAuth();
   const logoutMutation=useLogout();
-
-  useEffect(() => {
-    // accessToken이 있을 때만 사용자 정보 가져오기
-    if (accessToken) {
-      const fetchUserInfo = async () => {
-        try {
-          const response = await getMyInfo();
-          if (response.data?.name) {
-            setUserName(response.data.name);
-          }
-        } catch (error) {
-          console.error("사용자 정보 가져오기 실패:", error);
-        }
-      };
-      
-      fetchUserInfo();
-    }
-  }, [accessToken]);
 
   const handleLogout =  () => {
     logoutMutation.mutate(undefined,{
@@ -43,8 +24,6 @@ const Navbar = ({ onToggleSidebar }: NavbarProps) => {
     })
   };
 
-  
-  
 
   return (
     <nav className="bg-white dark:bg-gray-900 shadow-md fixed w-full z-10">
