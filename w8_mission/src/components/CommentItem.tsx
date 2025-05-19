@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Comment } from "../types/comment";
 import usePatchComment from "../hooks/mutations/usePatchComment";
 import useDeleteComment from "../hooks/mutations/useDeleteComment";
+import { Pencil, Trash } from "lucide-react"; // 아이콘 추가
 
 interface Props {
   comment: Comment;
@@ -12,6 +13,7 @@ interface Props {
 const CommentItem = ({ comment, lpId, isMine }: Props) => {
   const [editing, setEditing] = useState(false);
   const [value, setValue] = useState(comment.content);
+
   const patchComment = usePatchComment(lpId, comment.id);
   const deleteComment = useDeleteComment(lpId, comment.id);
 
@@ -43,28 +45,33 @@ const CommentItem = ({ comment, lpId, isMine }: Props) => {
                 onChange={(e) => setValue(e.target.value)}
                 className="bg-zinc-800 text-white p-1 rounded text-sm"
               />
-              <button onClick={handleEdit}>✔️</button>
+              <button onClick={handleEdit} className="text-green-400 text-lg">
+                ✔️
+              </button>
             </div>
           ) : (
             <p className="text-sm text-white mt-1">{comment.content}</p>
           )}
         </div>
       </div>
+
       {isMine && !editing && (
         <div className="relative group">
-          <button className="text-white">⋮</button>
-          <div className="hidden group-hover:block absolute right-0 top-6 bg-gray-700 rounded shadow">
+          <button className="text-white cursor-pointer">⋮</button>
+          <div className="hidden group-hover:flex absolute right-0 top-6 bg-zinc-700 px-2 py-1 rounded shadow-lg z-20 gap-2">
             <button
               onClick={() => setEditing(true)}
-              className="block px-4 py-2 text-sm text-white hover:bg-gray-600"
+              className="text-white hover:text-blue-300 cursor-pointer"
+              title="수정"
             >
-              수정
+              <Pencil className="w-4 h-4" />
             </button>
             <button
               onClick={handleDelete}
-              className="block px-4 py-2 text-sm text-white hover:bg-red-600"
+              className="text-white hover:text-red-300 cursor-pointer"
+              title="삭제"
             >
-              삭제
+              <Trash className="w-4 h-4" />
             </button>
           </div>
         </div>
