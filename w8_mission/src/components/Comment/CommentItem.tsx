@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Comment } from "../types/comment";
-import usePatchComment from "../hooks/mutations/usePatchComment";
-import useDeleteComment from "../hooks/mutations/useDeleteComment";
+import { Comment } from "../../types/comment";
+import usePatchComment from "../../hooks/mutations/usePatchComment";
+import useDeleteComment from "../../hooks/mutations/useDeleteComment";
 import { Pencil, Trash } from "lucide-react"; // 아이콘 추가
 
 interface Props {

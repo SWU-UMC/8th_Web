@@ -5,7 +5,7 @@ import useGetMyInfo from "../hooks/queries/useGetMyInfo";
 import { useAuth } from "../context/AuthContext";
 import usePostLike from "../hooks/mutations/usePostLike";
 import useDeleteLike from "../hooks/mutations/useDeleteLike";
-import CommentSection from "../components/CommentSection";
+import CommentSection from "../components/Comment/CommentSection";
 
 const LpDetailPage = () => {
   const { lpId } = useParams();

@@ -2,10 +2,10 @@ import { useState } from "react";
 import { useInView } from "react-intersection-observer";
 import CommentItem from "./CommentItem";
 import CommentSkeleton from "./CommentSkeleton";
-import useInfiniteCommentList from "../hooks/queries/useinfiniteCommentList";
-import usePostComment from "../hooks/mutations/usePostComment";
-import { useAuth } from "../context/AuthContext";
-import useGetMyInfo from "../hooks/queries/useGetMyInfo";
+import useInfiniteCommentList from "../../hooks/queries/useinfiniteCommentList";
+import usePostComment from "../../hooks/mutations/usePostComment";
+import { useAuth } from "../../context/AuthContext";
+import useGetMyInfo from "../../hooks/queries/useGetMyInfo";
 
 interface Props {
   lpId: number;
