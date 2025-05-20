@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PAGINATION_ORDER } from "../enums/common" // PAGINATION_ORDER import 추가
 import useGetInfiniteLpList from "../hooks/queries/useGetInfiniteLpList";
 import { useInView } from "react-intersection-observer";
@@ -9,6 +9,7 @@ import { FaPlus } from "react-icons/fa";
 import AddLpPopup from "../components/AddLpPopup";
 import useDebounce from "../hooks/queries/useDebounce";
 import { SEARCH_DEBOUNCE_DELAY } from "../constants/delay";
+import useThrottle from "../hooks/queries/useThrottle";
 
 const HomePage = () => {
     const [sortOrder, setSortOrder] = useState<PAGINATION_ORDER>(PAGINATION_ORDER.desc);
@@ -29,11 +30,34 @@ const HomePage = () => {
         threshold: 0,
     });
 
+    const throttledInView = useThrottle(inView, 1000); // 3초마다 inView 체크
+
+    const intervalRef = useRef<number | null>(null);
+
     useEffect(() => {
-        if (inView) {
-            !isFetching && hasNextPage && fetchNextPage();
+        if (throttledInView && hasNextPage && !intervalRef.current) {
+            intervalRef.current = window.setInterval(() => {
+                if (!isFetching && hasNextPage) {
+                    fetchNextPage();
+                }
+            }, 2000); // 3초마다 fetch
+
+            console.log("리렌더링");
         }
-    }, [inView, isFetching, hasNextPage, fetchNextPage]);
+
+        // inView가 false가 되면 fetch 중단
+        if (!throttledInView && intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
+
+        return () => {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+                intervalRef.current = null;
+            }
+        };
+    }, [throttledInView, isFetching, hasNextPage, fetchNextPage]);
 
     if (isError) {
         return <div className="text-white">Error</div>;
