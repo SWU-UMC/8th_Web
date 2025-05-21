@@ -7,6 +7,7 @@ import LpCard from "../components/LpCard/LpCard";
 import LpCardSkeletonList from "../components/LpCard/LpCardSkeletonList";
 import { Plus } from "lucide-react";
 import PostLpCard from "../components/LpCard/PostLpCard";
+import LpCreateModal from "../components/LpCreateModal";
 
 
 const HomePage = () => {
@@ -79,7 +80,7 @@ const HomePage = () => {
             >
             <Plus size={25} />
             </button>
-            {isModalOpen && <PostLpCard onClose={() => setIsModalOpen(false)} />}
+            {isModalOpen && <LpCreateModal onClose={() => setIsModalOpen(false)} />}
         </div>
         );
 }
