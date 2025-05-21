@@ -1,4 +1,5 @@
 
+import { LOCAL_STORAGE_KEY } from "../constants/key";
 import {RequestSigninDto, RequestSignupDto, ResponseMyInfoDto, ResponseSigninDto, ResponseSignupDto } from "../types/auth";
 import { axiosInstance } from "./axios";
 
@@ -25,3 +26,9 @@ export const postLogout = async () => {
     
     return data;
 } 
+export const deleteUser = async ():Promise<void> => {
+    await axiosInstance.delete("/v1/users");
+
+    localStorage.removeItem(LOCAL_STORAGE_KEY.accessToken);
+    localStorage.removeItem(LOCAL_STORAGE_KEY.refreshToken)
+};

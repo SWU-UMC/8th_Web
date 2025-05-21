@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useGetLpDetail from "../hooks/queries/useGetLpDetail";
 import { Heart, Image, Pencil, Save, Send, Trash2, UserRound } from "lucide-react";
 import useGetMtInfo from "../hooks/queries/useGetMyInfo";
@@ -6,18 +6,18 @@ import { useAuth } from "../context/AuthContext";
 import usePostLike from "../hooks/mutations/usePostLike";
 import useDeleteLike from "../hooks/mutations/useDeleteLike";
 import { useEffect, useRef, useState } from "react";
-import { ResponseMyInfoDto } from "../types/auth";
 import { getUserById } from "../apis/user";
 import { PAGINATION_ORDER } from "../enums/common";
 import { useInView } from "react-intersection-observer";
 import useGetInfiniteCommentList from "../hooks/queries/useGetInfiniteCommentList";
-import CommentSkeletonList from "../components/Comment/CommentSkeletonList";
 import useUpdateLp from "../hooks/mutations/useUpdateLp";
 import useDeleteLp from "../hooks/mutations/useDeleteLp";
+import { usePostComment } from "../hooks/mutations/usePostComment";
+import CommentList from "../components/Comment/CommentList";
 
 const LpDetailPage = () => {
     const {lpId} = useParams();
-    const {accessToken} = useAuth();
+    const {accessToken, user} = useAuth();
 
     const {data:lp, isPending, isError} = useGetLpDetail({lpId:Number(lpId)});
     const {data:me} = useGetMtInfo(accessToken); 
@@ -28,11 +28,20 @@ const LpDetailPage = () => {
 
     const { mutate: updateLp } = useUpdateLp();
     const { mutate: deleteLp } = useDeleteLp();
+    const { mutate: postCommentMutate } = usePostComment(Number(lpId));
 
-    const [author, setAuthor] = useState<ResponseMyInfoDto["data"] | null>(null);
+    const [author, setAuthor] = useState<any>(null);
+    const [editMode, setEditMode] = useState(false);
+    const [editTitle, setEditTitle] = useState("");
+    const [editContent, setEditContent] = useState("");
+    const [editTags, setEditTags] = useState<string[]>([]);
+    const [tagInput, setTagInput] = useState("");
+    const [editThumbnail, setEditThumbnail] = useState("");
+    const [commentContent, setCommentContent] = useState("");
     const [commentOrder, setCommentOrder] = useState<PAGINATION_ORDER>(
         (localStorage.getItem("commentSortOrder") as PAGINATION_ORDER) || PAGINATION_ORDER.desc
     );
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const {ref, inView} = useInView({
         threshold: 0,
     });
@@ -46,14 +55,6 @@ const LpDetailPage = () => {
     // const isLiked = lp?.data.likes.map((like)=> like.userId).includes(me?.data.id as number);
     const isLiked = lp?.data.likes.some((like)=> like.userId === me?.data.id);
 
-    const [editMode, setEditMode] = useState(false);
-
-    const [editTitle, setEditTitle] = useState("");
-    const [editContent, setEditContent] = useState("");
-    const [editTags, setEditTags] = useState<string[]>([]);
-    const [tagInput, setTagInput] = useState("");
-    const [editThumbnail, setEditThumbnail] = useState("");
-    const fileInputRef = useRef<HTMLInputElement>(null);
         
     useEffect(() => {
         if (lp) {
@@ -100,7 +101,19 @@ const LpDetailPage = () => {
 
     const handleDelete = () => {
         if (confirm("정말로 삭제하시겠습니까?")) {
-        deleteLp({ lpId: Number(lpId) });
+            deleteLp(
+                { lpId: Number(lpId) },
+                {
+                    onSuccess: () => {
+                        alert("삭제되었습니다.");
+                        navigate("/");
+                    },
+                    onError: (error) => {
+                        console.error("삭제 실패:", error);
+                        alert("삭제 중 오류가 발생했습니다.");
+                    },
+                }
+            );
         }
     };
 
@@ -111,10 +124,16 @@ const LpDetailPage = () => {
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-        const imageUrl = URL.createObjectURL(file);
-        setEditThumbnail(imageUrl);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setEditThumbnail(reader.result as string);
+            };
+            reader.readAsDataURL(file);
         }
     };
+
+    const navigate = useNavigate();
+
 
     if (isPending && isError) {
         return 
@@ -173,7 +192,7 @@ const LpDetailPage = () => {
                 type="text"
                 value={editTitle}
                 onChange={(e) => setEditTitle(e.target.value)}
-                className="flex-1 bg-gray-800 text-white text-lg font-bold p-2 rounded"
+                className="flex-1 bg-gray-800 text-white text-lg font-bold p-2 mr-4 rounded"
             />
             ) : (
             <h1 className="text-xl font-bold text-left">{lp?.data.title}</h1>
@@ -193,10 +212,10 @@ const LpDetailPage = () => {
                 />
                 </>
             )}
-            <button onClick={editMode ? handleSave : handleEditToggle} className="text-white hover:text-green-400">
+            <button onClick={editMode ? handleSave : handleEditToggle} className="text-white hover:text-green-400 cursor-pointer">
                 {editMode ? <Save size={20} /> : <Pencil size={20} />}
             </button>
-            <button onClick={handleDelete} className="text-white hover:text-red-500">
+            <button onClick={handleDelete} className="text-white hover:text-red-500 cursor-pointer">
                 <Trash2 size={20} />
             </button>
             </div>
@@ -226,7 +245,7 @@ const LpDetailPage = () => {
         )}
 
         {/* 태그 */}
-        {editMode && (
+        {editMode ? (
             <>
             <div className="flex mb-3 w-full">
                 <input
@@ -236,7 +255,7 @@ const LpDetailPage = () => {
                 onChange={(e) => setTagInput(e.target.value)}
                 className="flex-1 mr-2 bg-gray-800 text-white p-2 rounded border border-gray-400"
                 />
-                <button onClick={handleAddTag} className="bg-gray-400 text-white px-4 rounded hover:bg-gray-300">
+                <button onClick={handleAddTag} className="bg-gray-500 text-white px-4 rounded hover:bg-pink-500 cursor-pointer">
                 Add
                 </button>
             </div>
@@ -254,16 +273,31 @@ const LpDetailPage = () => {
                 ))}
             </div>
             </>
-        )}
+        ) : (
+            lp?.data.tags.length > 0 && (
+                <div className="flex flex-wrap justify-center gap-2 mb-6">
+                    {lp.data.tags.map((tag) => (
+                    <span
+                        key={tag.id}
+                        className="bg-gray-700 text-white px-3 py-1 rounded-full text-sm"
+                    >
+                        # {tag.name}
+                    </span>
+                    ))}
+                </div>
+            )
+        )
+    }
 
         {/* 좋아요 */}
         <button
             onClick={isLiked ? handleDislikeLp : handleLikeLp}
-            className="flex items-center space-x-1 text-pink-500"
+            className="flex items-center space-x-1 text-pink-500 cursor-pointer"
         >
             <Heart size={16} fill={isLiked ? "currentColor" : "transparent"} />
             <span className="text-sm">{lp?.data.likes.length}</span>
         </button>
+
         {/* 댓글 */}
         <div className="mt-10 w-full text-left">
             <div className="flex justify-between space-x-2 mb-2">
@@ -271,48 +305,41 @@ const LpDetailPage = () => {
             <div className="flex border rounded-sm overflow-hidden">
                 <button
                     onClick={() => setCommentOrder(PAGINATION_ORDER.asc)}
-                    className={`px-3 py-1 text-sm ${
+                    className={`px-3 py-1 cursor-pointer text-sm ${
                         commentOrder === PAGINATION_ORDER.asc ? "bg-white text-black font-bold" : "bg-black text-white"
                     }`}>
                     오래된 순
                 </button>
                 <button
                     onClick={() => setCommentOrder(PAGINATION_ORDER.desc)}
-                    className={`px-3 py-1 text-sm ${
+                    className={`px-3 py-1 cursor-pointer text-sm ${
                         commentOrder === PAGINATION_ORDER.desc ? "bg-white text-black font-bold" : "bg-black text-white"
                     }`}>
                     최신 순
                 </button>
             </div>
             </div>
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-2 pt-4">
                 <input
                     type="text"
                     className="flex-1 bg-[#1c1c1c] text-white p-2 rounded border border-gray-400"
                     placeholder="댓글을 입력해주세요"
+                    value={commentContent}
+                    onChange={(e) => setCommentContent(e.target.value)}
                 />
-                <button className="p-2 bg-gray-400 rounded hover:bg-gray-300 text-sm">
+                <button className="p-2 bg-gray-600 rounded hover:bg-pink-500 text-sm cursor-pointer"
+                onClick={() => {
+                    if (commentContent.trim()) {
+                        postCommentMutate(commentContent);
+                        setCommentContent(""); // 전송 후 초기화
+                    }
+                }}>
                     작성
                 </button>
             </div>
 
-            <div className="space-y-4">
-                {isFetching && !comments?.pages.length && (
-                    <CommentSkeletonList count={5} />
-                )}
-                {comments?.pages.flatMap((page) => page.data.data).map((comment) => (
-                    <div key={comment.id} className="flex items-start gap-3 border-b border-gray-700 pb-3">
-                        <img
-                            src={comment.author.avatar ?? "/default-profile.png"}
-                            alt={comment.author.name}
-                            className="w-7 h-7 rounded-full object-cover"
-                        />
-                        <div>
-                            <p className="text-sm font-semibold text-white">{comment.author.name}</p>
-                            <p className="text-sm text-gray-300">{comment.content}</p>
-                        </div>
-                    </div>
-                ))}
+            <div className="space-y-4 pt-5">
+                <CommentList lpId={Number(lpId)} order={commentOrder} />
             </div>
 
             {hasNextPage && (

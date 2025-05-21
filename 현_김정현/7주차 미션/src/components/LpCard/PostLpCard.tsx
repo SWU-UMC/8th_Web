@@ -53,7 +53,7 @@ const PostLpCard = ({ onClose }: { onClose: () => void }) => {
             formData.append("file", file);
 
             // 2. 서버로 업로드
-            const res = await axios.post("/v1/upload", formData, {
+            const res = await axios.post("/v1/uploads", formData, {
             headers: {
                 "Content-Type": "multipart/form-data"
             }
