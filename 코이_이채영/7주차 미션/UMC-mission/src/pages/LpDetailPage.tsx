@@ -67,7 +67,7 @@ const LpDetailPage = () => {
             setIsLiked(liked);
         }
     }, [lpData, me]);
-    
+
     const handleLikeLp = () => {
         if (!lpData || !me) return;
 
