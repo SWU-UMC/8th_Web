@@ -55,6 +55,7 @@ export type CreateLpDto = {
   content: string;
   thumbnail: string;
   tags: string[];
+  published: boolean;
 };
 
 export type ResponseCreateLpDto = CommonResponse<Lp>;

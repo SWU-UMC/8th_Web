@@ -17,7 +17,7 @@ const LpModal = ({ onClose }: Props) => {
   const [tagInput, setTagInput] = useState("");
   const [tags, setTags] = useState<string[]>([]);
 
-  const { mutate: postLpMutate } = usePostLp();
+  const { mutate: postLpMutate } = usePostLp(onClose);
 
   const handleThumbnailClick = () => {
     fileInputRef.current?.click();
@@ -60,9 +60,8 @@ const LpModal = ({ onClose }: Props) => {
       content,
       thumbnail,
       tags,
+      published: true,
     });
-
-    onClose(); // 성공 시 닫기
   };
 
   return (

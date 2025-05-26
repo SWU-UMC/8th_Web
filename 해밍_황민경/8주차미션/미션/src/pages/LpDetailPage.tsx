@@ -1,10 +1,12 @@
 import { useParams } from "react-router-dom";
 import useGetLpDetail from "../hooks/queries/useGetLpDetail";
-import { Heart } from "lucide-react";
+import { Heart, Trash } from "lucide-react";
 import useGetMyInfo from "../hooks/queries/useGetMyInfo";
 import { useAuth } from "../context/AuthContext";
 import usePostLike from "../hooks/mutations/usePostLike";
 import useDeleteLike from "../hooks/mutations/useDeleteLike";
+import CommentSection from "../components/Comment/CommentSection";
+import useDeleteLp from "../hooks/mutations/useDeleteLp";
 
 const LpDetailPage = () => {
   const { lpId } = useParams();
@@ -26,6 +28,7 @@ const LpDetailPage = () => {
   //     .includes(me?.data.id as number);
 
   const isLiked = lp?.data.likes.some((like) => like.userId === me?.data.id);
+  const deleteMutation = useDeleteLp(Number(lpId));
 
   const handleLikeLp = () => {
     likeMutate({ lpId: Number(lpId) });
@@ -38,6 +41,12 @@ const LpDetailPage = () => {
   if (isPending && isError) {
     return <></>;
   }
+
+  const handleDeleteLp = () => {
+    if (confirm("정말 이 LP를 삭제하시겠습니까?")) {
+      deleteMutation.mutate();
+    }
+  };
 
   //   return (
   //     <div className="{mt-12}">
@@ -62,7 +71,17 @@ const LpDetailPage = () => {
             <div className="w-8 h-8 rounded-full bg-gray-300" />
             <span className="text-sm font-medium">{lp?.data.author.name}</span>
           </div>
-          <span className="text-xs text-gray-400">1일 전</span>
+          <div className="flex flex-col items-end gap-1">
+            <span className="text-xs text-gray-400">1일 전</span>
+            {me?.data.id === lp?.data.author.id && (
+              <button
+                onClick={handleDeleteLp}
+                className="text-white hover:text-red-400 mt-1"
+              >
+                <Trash className="w-5 h-5 cursor-pointer" />
+              </button>
+            )}
+          </div>
         </div>
 
         <h2 className="text-xl font-bold mb-4">{lp?.data.title}</h2>
@@ -103,6 +122,7 @@ const LpDetailPage = () => {
             />
           </button>
         </div>
+        {lp?.data?.id && <CommentSection lpId={lp.data.id} />}
       </div>
     </div>
   );
