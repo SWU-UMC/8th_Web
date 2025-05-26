@@ -1,23 +1,31 @@
 import { useDispatch } from "react-redux";
 import { useSelector } from "../hooks/useCustomRedux";
 import { clearCart } from "../slices/cartSlice";
+import { openModal } from "../slices/modalSlice";
+import { FaTrash } from "react-icons/fa";
 
 const PriceBox = () => {
     const {total} = useSelector((state) => state.cart);
     const dispatch = useDispatch();
 
     const handleInitializeCart = () => {
-        dispatch(clearCart());
-    }
+        dispatch(openModal(() => dispatch(clearCart())));
+    };
 
     return (
-        <div className="p-12 flex justify-between">
-            <button  onClick={handleInitializeCart} className="border p-4 rounded-md cursor-pointer">
+        <div className="max-w-xl mx-auto mt-12 p-6 rounded-lg flex items-center justify-between">
+            <button
+                onClick={handleInitializeCart}
+                className="px-6 py-3 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600 transition duration-200 flex items-center gap-2"
+            >
+                <FaTrash className="w-5 h-5" />
                 전체 삭제
             </button>
-            <div className="p-4 flex justify-end">총 가격: {total}원</div>
+            <div className="text-lg font-medium text-gray-800">
+                Total: <span className="font-bold">{total.toLocaleString()}원</span>
+            </div>
         </div>
-    
+
     );
 };
 
