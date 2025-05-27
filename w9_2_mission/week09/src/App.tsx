@@ -4,6 +4,7 @@ import CartList from "./components/CartList";
 import Navbar from "./components/Navbar";
 import store from "./store/store";
 import PriceBox from "./components/PriceBox";
+import DeleteModal from "./components/DeleteModal";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Navbar />
       <CartList />
       <PriceBox />
+      <DeleteModal />
     </Provider>
   );
 }
