@@ -1,20 +1,15 @@
-import { useDispatch, useSelector } from "../hooks/CustomRedux";
-import { clearCart } from "../slices/cartSlice";
-import { closeModal } from "../slices/modalSlice";
+import { useCartActions } from "../hooks/useCartStore";
+import useModalStore from "../hooks/useModalStore";
 
 const DeleteModal = () => {
-  const dispatch = useDispatch();
-  const isOpen = useSelector((state) => state.modal.isOpen);
+  const { isOpen, closeModal } = useModalStore();
+  const { clearCart } = useCartActions();
 
   if (!isOpen) return null;
 
-  const handleCancel = () => {
-    dispatch(closeModal());
-  };
-
   const handleConfirm = () => {
-    dispatch(clearCart());
-    dispatch(closeModal());
+    clearCart();
+    closeModal();
   };
 
   return (
@@ -24,7 +19,7 @@ const DeleteModal = () => {
         <div className="flex justify-center gap-4">
           <button
             className="px-4 py-2 bg-gray-300 rounded"
-            onClick={handleCancel}
+            onClick={closeModal}
           >
             아니요
           </button>
