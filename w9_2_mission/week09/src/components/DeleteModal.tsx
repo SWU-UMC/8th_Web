@@ -18,13 +18,13 @@ const DeleteModal = () => {
         <p className="mb-4 font-semibold">정말 삭제하시겠습니까?</p>
         <div className="flex justify-center gap-4">
           <button
-            className="px-4 py-2 bg-gray-300 rounded"
+            className="px-4 py-2 bg-gray-300 rounded cursor-pointer"
             onClick={closeModal}
           >
             아니요
           </button>
           <button
-            className="px-4 py-2 bg-red-500 text-white rounded"
+            className="px-4 py-2 bg-red-500 text-white rounded cursor-pointer"
             onClick={handleConfirm}
           >
             네
