@@ -22,7 +22,7 @@ const LanguageSelector = ({
     <select
       value={value}
       onChange={(e) => onChange(e.target.value as MovieLanguage)}
-      className={`w-full rounded-md border border-gray-500 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 ${className}`}
+      className={`cursor-pointer w-full rounded-md border border-gray-500 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 ${className}`}
     >
       {options.map((option) => (
         <option key={option.value} value={option.value}>

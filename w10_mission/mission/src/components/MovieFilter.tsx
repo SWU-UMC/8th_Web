@@ -1,5 +1,4 @@
 import { memo, useState } from "react";
-
 import type { MovieFilters, MovieLanguage } from "../types/movie";
 import { Input } from "./Input";
 import { SelectBox } from "./SelectBox";
@@ -58,8 +57,13 @@ const MovieFilter = ({ onChange }: MovieFilterProps) => {
             className="w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        <div className="pt-4">
-          <button onClick={handleSubmit}>영화검색</button>
+        <div className="flex items-end">
+          <button
+            onClick={handleSubmit}
+            className="cursor-pointer rounded-lg bg-blue-600 px-4 py-2 text-white shadow hover:bg-blue-700 transition"
+          >
+            영화검색
+          </button>
         </div>
       </div>
     </div>
